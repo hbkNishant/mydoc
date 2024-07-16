@@ -1,1 +1,181 @@
-This is sample doc to edit and commit
+This is sample doc to edit and commitpackage com.mckesson.dm.caas.dto.v1.review.qna;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.Link;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mckesson.dm.caas.dto.v1.review.LosV1;
+import com.mckesson.dm.caas.dto.v1.review.ReviewTypeV1;
+import com.mckesson.dm.caas.dto.v1.review.ReviewWorkflowStateV1;
+import com.mckesson.dm.cgs.remoting.MediaTypes;
+import com.mckesson.dm.xml.jaxb.NullableLinkJaxbAdapter;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@XmlRootElement(name = "review_workflow_state")
+@XmlAccessorType(XmlAccessType.NONE)
+public class QnAWorkflowStateV1
+    extends ReviewWorkflowStateV1
+{
+    @JsonProperty("questions")
+    @XmlElementWrapper(name = "questions")
+    @XmlElement(name = "question")
+    public List<QuestionV1> questions = new ArrayList<>();
+
+    @JsonProperty(value = "questions_completed", required = true)
+    @XmlElement(name = "questions_completed", required = true)
+    public boolean questionsCompleted;
+
+    @JsonProperty("has_content_error")
+    @XmlElement(name = "has_content_error")
+    public Boolean hasContentError;
+
+    @XmlElementWrapper(name = "recommendation_selections")
+    @JsonProperty("recommendation_selections")
+    @XmlElement(name = "recommendation_selection")
+    public List<ReviewRecommendationGroupV1> recommendationSelections = new ArrayList<>();
+
+    @JsonProperty
+    @XmlElement
+    @XmlJavaTypeAdapter(NullableLinkJaxbAdapter.class)
+    public Link recommendations;
+
+    @JsonProperty
+    @XmlElement
+    @XmlJavaTypeAdapter(NullableLinkJaxbAdapter.class)
+    public Link availableRecommendationsLink;
+
+    @JsonProperty("selected_benchmark_los")
+    @XmlElement(name = "selected_benchmark_los")
+    public LosV1 selectedBenchmarkLos;
+
+    @JsonProperty("has_benchmark_los")
+    @XmlElement(name = "has_benchmark_los")
+    public boolean hasBenchmarkLos;
+
+    @JsonProperty("state_name")
+    @XmlElement(name = "state_name")
+    public String stateName;
+
+    @JsonProperty("review_reopened")
+    @XmlElement(name = "review_reopened")
+    public boolean reviewReopened;
+
+    @JsonProperty(value = "service_dialog_needed", required = true)
+    @XmlElement(name = "service_dialog_needed", required = true)
+    public boolean serviceDialogNeeded;
+
+    @JsonProperty(value = "not_recommended_service_review_selected")
+    @XmlElement(name = "not_recommended_service_review_selected")
+    public boolean notRecommendedServiceReviewSelected;
+
+    @JsonProperty(value = "qna_review_ready_for_criteria_calc", required = true)
+    @XmlElement(name = "qna_review_ready_for_criteria_calc", required = true)
+    public boolean qnaReviewReadyForCriteriaCalc;
+
+    @JsonProperty(value = "additional_criteria", required = false)
+    @XmlElement(name = "additional_criteria", required = false)
+    public AdditionalCriteriaV1 additionalCriteria;
+
+    @XmlElementWrapper(name = "determination_values")
+    @JsonProperty("determination_values")
+    @XmlElement(name = "determination_values")
+    public List<String> determinationValues = new ArrayList<>();
+
+    private Map<Long, String> recommendationSettings = new HashMap<>();
+
+    public QnAWorkflowStateV1()
+    {
+        reviewType = ReviewTypeV1.QNA;
+    }
+
+    protected void copyPropertiesFrom(QnAWorkflowStateV1 source)
+    {
+        super.copyPropertiesFrom(source);
+
+        questions = source.questions;
+        questionsCompleted = source.questionsCompleted;
+        hasContentError = source.hasContentError;
+        recommendationSelections = source.recommendationSelections;
+        recommendations = source.recommendations;
+        selectedBenchmarkLos = source.selectedBenchmarkLos;
+        hasBenchmarkLos = source.hasBenchmarkLos;
+        stateName = source.stateName;
+        reviewReopened = source.reviewReopened;
+        serviceDialogNeeded = source.serviceDialogNeeded;
+        qnaReviewReadyForCriteriaCalc = source.qnaReviewReadyForCriteriaCalc;
+        notRecommendedServiceReviewSelected = source.notRecommendedServiceReviewSelected;
+        additionalCriteria = source.additionalCriteria;
+        determinationValues = source.determinationValues;
+        recommendationSettings = source.recommendationSettings;
+    }
+
+    public void addQuestion(QuestionV1 questionV1)
+    {
+        questions.add(questionV1);
+    }
+
+    public QuestionV1 addNewQuestion()
+    {
+        QuestionV1 questionV1 = new QuestionV1();
+        questions.add(questionV1);
+        return questionV1;
+    }
+
+    public ReviewRecommendationGroupV1 addRecommendationSelection()
+    {
+        if (recommendationSelections == null)
+        {
+            recommendationSelections = new ArrayList<>();
+        }
+
+        ReviewRecommendationGroupV1 recommendationSelection = new ReviewRecommendationGroupV1();
+        recommendationSelections.add(recommendationSelection);
+        return recommendationSelection;
+    }
+
+    @Override
+    public boolean isNew()
+    {
+        return questions.isEmpty();
+    }
+
+    public List<String> getDeterminationValues()
+    {
+        return determinationValues;
+    }
+
+    public void setDeterminationValues(List<String> determinationValues)
+    {
+        this.determinationValues = determinationValues;
+    }
+
+    public Map<Long, String> getRecommendationSettings()
+    {
+        return recommendationSettings;
+    }
+
+    public void setRecommendationSettings(Map<Long, String> recommendationSettings)
+    {
+        this.recommendationSettings = recommendationSettings;
+    }
+
+    public class Mime
+    {
+        public static final String LABEL = "qna-workflow-state-" + MediaTypes.Ver.V1;
+        private static final String PREFIX_LABEL = MediaTypes.AllV1.MCK_PREFIX + LABEL;
+        public static final String JSON = PREFIX_LABEL + MediaTypes.JSON;
+    }
+}
+
+
