@@ -1,7 +1,25 @@
-1. Why we needed to make changes for SOS, Why it is required
-2. Flow of Backend is there any document or wiki page of this to understand it would be helpful
-3. JRXML CHanges
-3. Beans and Model
-4. CPT CODES
-5. Test Case of the SOS changes
+Select * 
 
+from SUBSET_PROPERTY where name in ('SoSSource','SoSAge','SoSLookup') 
+
+   and subset_id in 
+
+     (select smv.LATEST_REVISION_SUBSET_ID FROM SUBSET_MINOR_VERSION smv 
+
+   JOIN CATEGORY_SUBSET_IDENT_ASSOC csia ON smv.SUBSET_IDENTIFIER_ID = csia.SUBSET_IDENTIFIER_ID 
+
+   JOIN CATEGORY c ON csia.CATEGORY_ID = c.CATEGORY_ID 
+
+   JOIN PRODUCT_VERSION pv ON c.PRODUCT_VERSION_ID = pv.PRODUCT_VERSION_ID 
+
+   JOIN PRODUCT p ON pv.PRODUCT_ID = p.PRODUCT_ID 
+
+WHERE smv.ACTIVE = 1 
+
+--   AND p.PRODUCT_CID = 'PROCEDURES' 
+
+--   AND p.PRODUCT_CID = 'BHPROCEDURES' 
+
+ AND p.PRODUCT_CID = 'MDCR-PROCEDURES' 
+
+ AND pv.VERSION_CID = 'RM24') 
