@@ -23,3 +23,7 @@ WHERE smv.ACTIVE = 1
  AND p.PRODUCT_CID = 'MDCR-PROCEDURES' 
 
  AND pv.VERSION_CID = 'RM24') 
+
+
+
+update subset_property set value = 'ALL' where name = 'SoSSource'
