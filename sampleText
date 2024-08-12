@@ -30,12 +30,3 @@ update subset_property set value = 'ALL' where name = 'SoSSource'
 
 
 
-Here's a message you can use to communicate the points you've found during your technical review:
-
----
-
-
-
----
-
-Feel free to adjust the message to suit your tone and style!
