@@ -28,5 +28,34 @@ WHERE smv.ACTIVE = 1
 
 update subset_property set value = 'ALL' where name = 'SoSSource'
 
+ClinicalScenarioPdfMapper
+
+at line no -77 to 84 we can convert it into Streams
+
+
+
+---------------------------
+in PathwaysPdfMapperV1
+
+from line no 133 to 136 
+catch (JRException ex)
+            {
+                throw new InternalServerErrorException(ex);
+            }
+
+in test class this catch block is not covering 
+in test class lino no 533-537
+catch (IOException | JRException e) at line no
+        {
+            throw new RuntimeException(e);
+
+        }
+
+
+-at line no 506 in executeToPdf method from PathwaysPdfMapperV1Test class
+while debugging giving error No argument value was captured!
+
+I want to know about setupMakeScenarioBean ()
+
 
 
