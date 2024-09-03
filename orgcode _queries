@@ -1,0 +1,23 @@
+select o.code, f.* 
+from facility f
+join organization o on o.organization_id = f.organization_id
+where o.code like '%CUSTOMERREMOVAL%' or o.code like '%REMOV%';
+
+
+select o.code, o.description, f.* 
+from facility f
+join organization o on o.organization_id = f.organization_id
+where o.code like '%CUSTOMERREMOVAL%' or o.code like '%REMOV%';
+
+
+select * from organization where code = 'IQCCUSTOMERREMOVAL01'
+
+select * from ALLOW_ORG_DELETION
+
+-------------------------------------
+CAAS
+-------
+select *
+from MEDICAL_REVIEW mr
+  left outer join MEDICAL_REVIEW_PATIENT mrp  --left outer so that if no patient data exists, still get record back
+    on mrp.MEDICAL_REVIEW_PATIENT_ID = mr.MEDICAL_REVIEW_PATIENT_ID
