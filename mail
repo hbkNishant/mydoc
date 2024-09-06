@@ -1,0 +1,26 @@
+Here's a draft for your email:
+
+---
+
+**Subject: Clarification Required Regarding Ticket US124389 Review**
+
+Hi Fang,
+
+I hope you're doing well. 
+
+While reviewing the ticket **US124389**, I encountered a couple of issues specifically related to **AC3**:
+1. I am not getting the "data backup is required" error.
+2. While running the job on Obsidian, I did not see the red cross button to interrupt or stop the job as mentioned.
+
+Additionally, the ticket references the class **ObsidianMedicalReviewPurgeJob**, which I found in your branch. However, in the master branch, I only see **ObsidianPurgeJob**. Could you please clarify if I'm on the right path with this or if there’s a discrepancy between the branches?
+
+I also attempted to build your branch but ran into errors during the build process. Could you provide some guidance on which branch I should be working on? If necessary, I would appreciate it if we could have a discussion to go over the details and resolve this efficiently.
+
+Looking forward to your response.
+
+Best regards,  
+Nishant
+
+---
+
+Feel free to modify any details if necessary!
