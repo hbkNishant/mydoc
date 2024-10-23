@@ -1,0 +1,21 @@
+Sure! Here's the response in English:
+
+
+---
+
+Hi Kevin,
+
+I understand your question. I chose to use qna-export-settings because I felt we could extend the existing functionality to support the care plan export settings without needing to create a new component. Instead of building something from scratch, I thought it would be better to reuse the current system.
+
+I did modify some logic to ensure it works with the care plan, but the overall idea was to keep the code DRY (Don't Repeat Yourself) and avoid unnecessary duplication.
+
+If you think creating a new component is necessary, we can definitely discuss that further.
+
+Regards,
+[Your Name]
+
+
+---
+
+Let me know if this works or if you'd like any adjustments!
+
