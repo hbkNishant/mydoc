@@ -1,0 +1,82 @@
+save(): void {
+    console.log('Starting save process');
+    
+    const CHUNK_SIZE = 500; // Define the manageable chunk size
+    const totalRows = this.rowData.length;
+
+    // Function to process a chunk of rows
+    const processChunk = (chunk: any[]): void => {
+        const properties: { members: any[] } = { members: [] };
+
+        chunk.forEach((row, rowIndex: number): void => {
+            const facilitySubsetProperties: any = {};
+
+            if (row.status.enabled !== row.status.wipEnabled) {
+                facilitySubsetProperties[this.loggedInFacility.facilityAcl] = row.status.wipEnabled;
+            }
+
+            const statusColIds: string[] = Object.keys(row).filter(property => property.startsWith('status'));
+            statusColIds.forEach(colId => {
+                if (row[colId].enabled !== row[colId].wipEnabled) {
+                    const facAcl: string = colId.substring(7);
+                    facilitySubsetProperties[facAcl] = row[colId].wipEnabled;
+                }
+            });
+
+            if (Object.keys(facilitySubsetProperties).length > 0) {
+                properties.members.push({
+                    subsetId: row.subsetId,
+                    minorVersion: row.minorVersion,
+                    facilitySubsetProperties
+                });
+                console.log(`Processed row with subsetId ${row.subsetId}`);
+            }
+        });
+
+        console.log('Properties to be saved:', properties);
+
+        const backendSaveStartTime: number = performance.now();
+
+        // Call the backend with the chunk's properties
+        this.spinnerService.spinOn(
+            this.criteriaManagementService.asyncSaveProperties(properties).pipe(
+                tap(() => {
+                    this.logTime('Backend call for save', backendSaveStartTime);
+                    console.log('Save successful for chunk');
+                }),
+                finalize(() => {
+                    console.log('Updating counts for chunk');
+                    this.updateActiveCount();
+                    if (this.gridResultFiltered()) {
+                        this.gridApi.onFilterChanged();
+                    }
+                    this.doNoopPostForCacheBusting();
+                    this.savedComplete = true;
+                    console.log('Save process for chunk completed');
+                })
+            )
+        ).subscribe(
+            res => {
+                console.log('Backend response received for chunk');
+                this.onSubsetsUpdated(res.body);
+            },
+            error => {
+                console.error('Error during save process for chunk', error);
+            }
+        );
+    };
+
+    // Divide rows into chunks and process each chunk
+    if (totalRows > CHUNK_SIZE) {
+        console.log(`RowData exceeds ${CHUNK_SIZE}. Splitting into chunks.`);
+        for (let i = 0; i < totalRows; i += CHUNK_SIZE) {
+            const chunk = this.rowData.slice(i, i + CHUNK_SIZE);
+            console.log(`Processing chunk ${i / CHUNK_SIZE + 1}`);
+            processChunk(chunk);
+        }
+    } else {
+        // Process all rows as a single chunk
+        console.log('Processing all rows as a single chunk.');
+        processChunk(this.rowData);
+    }
+}
